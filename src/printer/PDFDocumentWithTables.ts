@@ -92,6 +92,13 @@ export class PDFDocumentWithTables extends PDFDocument {
             // Allow the user to override style for rows
             prepareRow(row, i)
 
+            if (i === table.rows.length - 1) {
+                this.moveTo(startX, rowBottomY - rowSpacing * 0.5)
+                    .lineTo(startX + usableWidth, rowBottomY - rowSpacing * 0.5)
+                    .lineWidth(2)
+                    .stroke()
+            }
+
             const menuName = row[0]
             const count = row[1]
             const price = row[2]

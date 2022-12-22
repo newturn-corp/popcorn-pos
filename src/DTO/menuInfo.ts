@@ -14,7 +14,7 @@ export class MenuInfo {
     menuName: string
     count: number
     price: number
-    options: OptionInfo[]
+    options: OptionInfo[] = []
 
     constructor (menuName: string, count: number, price: number, options: OptionInfo[]) {
         this.menuName = menuName

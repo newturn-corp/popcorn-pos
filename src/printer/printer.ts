@@ -1,0 +1,50 @@
+import { ReceiptInfo } from '../DTO/receiptInfo'
+import { PDFDocumentWithTables } from './PDFDocumentWithTables'
+import fs from 'fs'
+import { TitlePrinter } from './TitlePrinter'
+import { OrderMetaInfoPrinter } from './OrderMetaInfoPrinter'
+import { ShippingInfoPrinter } from './ShippingInfoPrinter'
+import { RequestInfoPrinter } from './RequestInfoPrinter'
+import { MenuPrinter } from './MenuPrinter'
+import { OriginPrinter } from './OriginPrinter'
+import { ExtraInfoPrinter } from './ExtraInfoPrinter'
+import { NoticePrinter } from './NoticePrinter'
+
+export class Printer {
+    private readonly outputPath: string
+    private readonly doc: PDFDocumentWithTables
+    private titlePrinter: TitlePrinter
+    private orderMetaInfoPrinter: OrderMetaInfoPrinter
+    private shippingInfoPrinter: ShippingInfoPrinter
+    private requestInfoPrinter: RequestInfoPrinter
+    private menuPrinter: MenuPrinter
+    private extraInfoPrinter: ExtraInfoPrinter
+    private originPrinter: OriginPrinter
+    private noticePrinter: NoticePrinter
+
+    constructor () {
+        this.doc = new PDFDocumentWithTables(undefined)
+        this.outputPath = `${Math.random()}.pdf`
+        this.doc.pipe(fs.createWriteStream(this.outputPath))
+        this.titlePrinter = new TitlePrinter()
+        this.orderMetaInfoPrinter = new OrderMetaInfoPrinter()
+        this.shippingInfoPrinter = new ShippingInfoPrinter()
+        this.requestInfoPrinter = new RequestInfoPrinter()
+        this.menuPrinter = new MenuPrinter()
+        this.extraInfoPrinter = new ExtraInfoPrinter()
+        this.originPrinter = new OriginPrinter()
+        this.noticePrinter = new NoticePrinter()
+    }
+
+    print (receiptInfo: ReceiptInfo) {
+        this.titlePrinter.printTitle(this.doc, receiptInfo)
+        this.orderMetaInfoPrinter.printOrderMetaInfo(this.doc, receiptInfo)
+        this.shippingInfoPrinter.printShippingInfo(this.doc, receiptInfo)
+        this.requestInfoPrinter.printRequestInfo(this.doc, receiptInfo)
+        this.menuPrinter.printMenu(this.doc, receiptInfo)
+        this.extraInfoPrinter.printExtraInfo(this.doc, receiptInfo)
+        this.originPrinter.printOrigin(this.doc)
+        this.noticePrinter.printNotice(this.doc)
+        this.doc.end()
+    }
+}

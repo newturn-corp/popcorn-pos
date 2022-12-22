@@ -1,22 +1,52 @@
 import { Interpreter } from './Interpreter'
 import { ReceiptInfo } from '../DTO/receiptInfo'
+import { MenuInterpreter } from './MenuInterpreter'
 
 export class BaeminInterpreter implements Interpreter {
     interpret (rawData: string): ReceiptInfo {
         const splitedData = rawData.split('\n')
+        console.log(splitedData)
         const orderNumberInfo = this.getOrderNumber(splitedData)
         const address = this.getAddress(splitedData)
+        const orderAt = this.getOrderAt(splitedData)
+        const payMethod = this.getPayMethod(splitedData)
+        const phone = this.getPhone(splitedData)
+        const request = this.getUserRequest(splitedData)
+        const deliveryTip = this.getDeliveryTip(splitedData)
+        const totalPrice = this.getTotalPrice(splitedData)
+        const menuList = this.getMenuList(splitedData)
+        return new ReceiptInfo(
+            0,
+            orderNumberInfo.short,
+            orderNumberInfo.full,
+            payMethod,
+            address.old,
+            address.new,
+            phone,
+            request.store,
+            request.delivery,
+            menuList,
+            deliveryTip,
+            totalPrice,
+            orderAt
+        )
     }
 
     getOrderNumber (splitedData: string[]) {
         const shortOrderNumberLine = splitedData[1]
-        const fullOrderNumberLine = splitedData[splitedData.length - 5]
+        const fullOrderNumberLine = splitedData[splitedData.length - 10]
         const shortOrderNumber = shortOrderNumberLine.split(' ')[1].trim()
         const fullOrderNumber = fullOrderNumberLine.split(':')[1]
         return {
             short: shortOrderNumber,
             full: fullOrderNumber
         }
+    }
+
+    getPayMethod (splitedData: string[]) {
+        const payMethodLine = splitedData[2]
+        const payMethod = payMethodLine.split(' ').slice(1).join('').trim()
+        return payMethod
     }
 
     getAddress (splitedData: string[]) {
@@ -29,15 +59,15 @@ export class BaeminInterpreter implements Interpreter {
     }
 
     getPhone (splitedData: string[]) {
-        return splitedData[8]
+        return splitedData[9]
     }
 
     getUserRequest (splitedData: string[]) {
-        const storeRequestLine = splitedData[13]
-        const deliveryRequestLine = splitedData[14]
-        const envRequestLine = splitedData[16]
-        const storeRequest = storeRequestLine.split(':').slice(1).join('').trim()
-        const deliveryRequest = deliveryRequestLine.split(':').slice(1).join('').trim()
+        const storeRequestLine = splitedData[14]
+        const deliveryRequestLine = splitedData[15]
+        const envRequestLine = splitedData[17]
+        const storeRequest = storeRequestLine.slice(4, storeRequestLine.length).trim()
+        const deliveryRequest = deliveryRequestLine.slice(4, deliveryRequestLine.length).trim()
 
         return {
             store: storeRequest + ` (${envRequestLine})`,
@@ -46,20 +76,21 @@ export class BaeminInterpreter implements Interpreter {
     }
 
     getMenuList (splitedData: string[]) {
-        const menuListLines = splitedData[splitedData.length - 9]
+        const menuInterpreter = new MenuInterpreter()
+        return menuInterpreter.getBaeminMenuList(splitedData)
     }
 
     getDeliveryTip (splitedData: string[]) {
-        const tipLine = splitedData[splitedData.length - 9]
-        return tipLine.slice(tipLine.length - 5, tipLine.length).trim()
+        const tipLine = splitedData[splitedData.length - 14]
+        return Number(tipLine.slice(tipLine.length - 5, tipLine.length).trim().replace(',', ''))
     }
 
     getTotalPrice (splitedData: string[]) {
-        const totalPriceLine = splitedData[splitedData.length - 7]
-        return totalPriceLine.slice(totalPriceLine.length - 7, totalPriceLine.length).trim()
+        const totalPriceLine = splitedData[splitedData.length - 12]
+        return Number(totalPriceLine.slice(totalPriceLine.length - 7, totalPriceLine.length).trim().replace(',', ''))
     }
 
     getOrderAt (splitedData: string[]) {
-        return splitedData[splitedData.length - 4]
+        return splitedData[splitedData.length - 9]
     }
 }

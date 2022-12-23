@@ -6,6 +6,7 @@ import { Platform } from '../Types/enum'
 export class BaeminInterpreter implements Interpreter {
     interpret (rawData: string): ReceiptInfo {
         const splitedData = rawData.split('\n\r')
+        console.log(splitedData)
         const orderNumberInfo = this.getOrderNumber(splitedData)
         const address = this.getAddress(splitedData)
         const orderAt = this.getOrderAt(splitedData)

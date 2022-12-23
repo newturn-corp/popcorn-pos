@@ -16,7 +16,7 @@ port.on('open', (err) => {
     } else {
         console.log('open')
     }
-    port.on('data', (data) => {
+    port.on('data', function (data) {
         const decodedData = iconv.decode(data, 'EUC-KR').toString()
         console.log(decodedData)
         const interpreter = InterpreterFactory.getInterpreter(decodedData)

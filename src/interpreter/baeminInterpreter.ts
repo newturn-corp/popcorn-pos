@@ -1,11 +1,11 @@
 import { Interpreter } from './Interpreter'
 import { ReceiptInfo } from '../DTO/receiptInfo'
 import { MenuInterpreter } from './MenuInterpreter'
+import { Platform } from '../Types/enum'
 
 export class BaeminInterpreter implements Interpreter {
     interpret (rawData: string): ReceiptInfo {
-        const splitedData = rawData.split('\n')
-        console.log(splitedData)
+        const splitedData = rawData.split('\n\r')
         const orderNumberInfo = this.getOrderNumber(splitedData)
         const address = this.getAddress(splitedData)
         const orderAt = this.getOrderAt(splitedData)
@@ -16,7 +16,7 @@ export class BaeminInterpreter implements Interpreter {
         const totalPrice = this.getTotalPrice(splitedData)
         const menuList = this.getMenuList(splitedData)
         return new ReceiptInfo(
-            0,
+            Platform.BAEMIN,
             orderNumberInfo.short,
             orderNumberInfo.full,
             payMethod,

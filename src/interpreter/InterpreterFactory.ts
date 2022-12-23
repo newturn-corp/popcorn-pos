@@ -3,7 +3,8 @@ import { BaeminInterpreter } from './baeminInterpreter'
 
 class InterpreterFactory {
     getInterpreter (rawData: string): Interpreter {
-        const firstLine = rawData.split('\n')[0]
+        const splitedData = rawData.split('\n\r')
+        const firstLine = splitedData[0]
         if (firstLine.includes('배달 주문전표')) {
             return new BaeminInterpreter()
         }

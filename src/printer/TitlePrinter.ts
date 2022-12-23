@@ -15,7 +15,7 @@ export class TitlePrinter {
     }
 
     printTitle (doc: PDFKit.PDFDocument, receiptInfo: ReceiptInfo) {
-        doc.font(defaultFont).fontSize(40).text(this.getTitleText(receiptInfo.platform), {
+        doc.font(defaultFont).fontSize(55).text(this.getTitleText(receiptInfo.platform), {
             align: 'center',
             lineGap: 20
         })

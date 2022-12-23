@@ -3,18 +3,18 @@ import PDFKit from 'pdfkit'
 export const drawDivider = (doc: PDFKit.PDFDocument, text?: string) => {
     if (text) {
         const targetY = doc.y
-        doc.fontSize(20).moveTo(40, targetY)
-            .lineTo(250, targetY)
+        doc.fontSize(30).moveTo(0, targetY)
+            .lineTo(230, targetY)
             .stroke()
-            .text(text, 260, targetY - 10, {
+            .text(text, 240, targetY - 15, {
                 paragraphGap: 10
             })
-        doc.moveTo(340, targetY)
-            .lineTo(570, targetY)
+        doc.moveTo(360, targetY)
+            .lineTo(600, targetY)
             .stroke()
     } else {
-        doc.moveTo(40, doc.y)
-            .lineTo(570, doc.y)
+        doc.moveTo(0, doc.y)
+            .lineTo(600, doc.y)
             .stroke()
     }
 }

@@ -8,14 +8,14 @@ export class ExtraInfoPrinter {
         drawDivider(doc, '      ')
         doc
             .font(defaultFont)
-            .fontSize(20)
-            .text(`주문 번호: ${receiptInfo.orderNumber.full}`, 40, undefined, {
+            .fontSize(30)
+            .text(`주문 번호: ${receiptInfo.orderNumber.full}`, 0, undefined, {
                 paragraphGap: 5
             })
         doc
             .font(defaultFont)
-            .fontSize(20)
-            .text(`주문 일시: ${receiptInfo.orderAt}`, 40, undefined, {
+            .fontSize(30)
+            .text(`주문 일시: ${receiptInfo.orderAt}`, 0, undefined, {
                 paragraphGap: 18
             })
     }

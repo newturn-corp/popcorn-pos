@@ -23,9 +23,11 @@ export class Printer {
     private noticePrinter: NoticePrinter
 
     constructor () {
-        this.doc = new PDFDocumentWithTables(undefined)
-        this.outputPath = `${Math.random()}.pdf`
-        this.doc.pipe(fs.createWriteStream(this.outputPath))
+        this.doc = new PDFDocumentWithTables({
+            size: [600, 5000],
+            margin: 0
+        })
+        this.outputPath = 'output.pdf' || `${Math.random()}.pdf`
         this.titlePrinter = new TitlePrinter()
         this.orderMetaInfoPrinter = new OrderMetaInfoPrinter()
         this.shippingInfoPrinter = new ShippingInfoPrinter()
@@ -45,6 +47,20 @@ export class Printer {
         this.extraInfoPrinter.printExtraInfo(this.doc, receiptInfo)
         this.originPrinter.printOrigin(this.doc)
         this.noticePrinter.printNotice(this.doc)
-        this.doc.end()
+        // this.doc.end()
+        const resultDoc = new PDFDocumentWithTables({
+            size: [600, this.doc.y + 50],
+            margin: 0
+        })
+        resultDoc.pipe(fs.createWriteStream(this.outputPath))
+        this.titlePrinter.printTitle(resultDoc, receiptInfo)
+        this.orderMetaInfoPrinter.printOrderMetaInfo(resultDoc, receiptInfo)
+        this.shippingInfoPrinter.printShippingInfo(resultDoc, receiptInfo)
+        this.requestInfoPrinter.printRequestInfo(resultDoc, receiptInfo)
+        this.menuPrinter.printMenu(resultDoc, receiptInfo)
+        this.extraInfoPrinter.printExtraInfo(resultDoc, receiptInfo)
+        this.originPrinter.printOrigin(resultDoc)
+        this.noticePrinter.printNotice(resultDoc)
+        resultDoc.end()
     }
 }

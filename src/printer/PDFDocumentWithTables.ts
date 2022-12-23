@@ -9,6 +9,7 @@ export class PDFDocumentWithTables extends PDFDocument {
         let startX = 40
         let startY = this.y
         let options: any = {}
+        const menuFontSize = 50
 
         if ((typeof arg0 === 'number') && (typeof arg1 === 'number')) {
             startX = arg0
@@ -22,7 +23,7 @@ export class PDFDocumentWithTables extends PDFDocument {
         const columnCount = table.headers.length
         const columnSpacing = options.columnSpacing || 15
         const rowSpacing = options.rowSpacing || 5
-        const usableWidth = 530
+        const usableWidth = 600
 
         const prepareHeader = options.prepareHeader || (() => {})
         const prepareRow = options.prepareRow || (() => {})
@@ -30,18 +31,19 @@ export class PDFDocumentWithTables extends PDFDocument {
             let result = 0
 
             row.forEach((cell: any) => {
+                console.log(cell)
                 const cellHeight = this.heightOfString(cell, {
                     width: columnWidth,
                     align: 'left'
                 })
+                console.log('cell height ' + cellHeight)
                 result = Math.max(result, cellHeight)
             })
 
             return result + rowSpacing
         }
 
-        const columnContainerWidth = usableWidth / columnCount
-        const columnWidth = columnContainerWidth - columnSpacing
+        const columnWidth = 600
         const maxY = this.page.height - this.page.margins.bottom
 
         let rowBottomY = 0
@@ -57,18 +59,18 @@ export class PDFDocumentWithTables extends PDFDocument {
         // Check to have enough room for header and first rows
         if (startY + 3 * computeRowHeight(table.headers) > maxY) { this.addPage() }
 
-        const menuWidth = 340
-        const countWidth = 60
-        const priceWidth = 130
-        this.text('메뉴', 40, startY, {
+        const menuWidth = 370
+        const countWidth = 50
+        const priceWidth = 180
+        this.text('메뉴', 0, startY, {
             width: menuWidth,
             align: 'left'
         })
-        this.text('수량', 40 + menuWidth, startY, {
+        this.text('수량', menuWidth, startY, {
             width: countWidth,
             align: 'right'
         })
-        this.text('가격', 40 + menuWidth + countWidth, startY, {
+        this.text('가격', menuWidth + countWidth, startY, {
             width: priceWidth,
             align: 'right'
         })
@@ -77,24 +79,30 @@ export class PDFDocumentWithTables extends PDFDocument {
         rowBottomY = Math.max(startY + computeRowHeight(table.headers), rowBottomY)
 
         // Separation line between headers and rows
-        this.moveTo(startX, rowBottomY - rowSpacing * 0.5)
-            .lineTo(startX + usableWidth, rowBottomY - rowSpacing * 0.5)
+        this.moveTo(0, rowBottomY - rowSpacing * 0.5)
+            .lineTo(usableWidth, rowBottomY - rowSpacing * 0.5)
             .lineWidth(2)
             .stroke()
 
+        this.fontSize(menuFontSize)
         table.rows.forEach((row: any, i: any) => {
             const rowHeight = computeRowHeight(row)
-
+            console.log(row)
+            console.log('rowHeight ' + rowHeight)
             // Switch to next page if we cannot go any further because the space is over.
             // For safety, consider 3 rows margin instead of just one
-            if (startY + 3 * rowHeight < maxY) { startY = rowBottomY + rowSpacing } else { this.addPage() }
+            if (startY + 3 * rowHeight < maxY) {
+                startY = rowBottomY + rowSpacing
+            } else {
+                this.addPage()
+            }
 
             // Allow the user to override style for rows
             prepareRow(row, i)
 
             if (i === table.rows.length - 1) {
-                this.moveTo(startX, rowBottomY - rowSpacing * 0.5)
-                    .lineTo(startX + usableWidth, rowBottomY - rowSpacing * 0.5)
+                this.moveTo(0, rowBottomY - rowSpacing * 0.5)
+                    .lineTo(usableWidth, rowBottomY - rowSpacing * 0.5)
                     .lineWidth(2)
                     .stroke()
             }
@@ -102,21 +110,24 @@ export class PDFDocumentWithTables extends PDFDocument {
             const menuName = row[0]
             const count = row[1]
             const price = row[2]
-            this.fontSize(30).text(menuName, 40, startY, {
-                width: menuWidth,
+            this.fontSize(menuFontSize).text(menuName, 0, startY, {
                 align: 'left'
             })
-            this.text(count, 40 + menuWidth, startY, {
+            const yPosition = this.x > menuWidth ? startY + rowHeight : startY
+            this.text(count, menuWidth, yPosition, {
                 width: countWidth,
                 align: 'right'
             })
-            this.text(price, 40 + menuWidth + countWidth, startY, {
+            this.text(price, menuWidth + countWidth, yPosition, {
                 width: priceWidth,
                 align: 'right'
             })
 
             // Refresh the y coordinate of the bottom of this row
-            rowBottomY = Math.max(startY + rowHeight, rowBottomY)
+            console.log(startY)
+            console.log('before' + rowBottomY)
+            rowBottomY = Math.max(yPosition + rowHeight, rowBottomY)
+            console.log('after' + rowBottomY)
         })
 
         this.x = startX

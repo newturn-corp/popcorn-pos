@@ -19,6 +19,7 @@ export class MenuPrinter {
         const rows = this.generateMenuRows(receiptInfo)
         rows.push(['배달팁', '', receiptInfo.deliveryTip.toLocaleString()])
         rows.push(['합계', '', receiptInfo.totalPrice.toLocaleString()])
+        console.log(rows)
         const
             table0 = {
                 headers: ['메뉴', '수량', '가격'],

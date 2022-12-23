@@ -18,6 +18,9 @@ port.on('open', (err) => {
     }
     port.on('data', function (data) {
         const decodedData = iconv.decode(data, 'EUC-KR').toString()
+        if (decodedData.length < 20) {
+            return
+        }
         console.log(decodedData)
         const interpreter = InterpreterFactory.getInterpreter(decodedData)
         if (interpreter instanceof BaeminInterpreter) {

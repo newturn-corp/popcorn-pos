@@ -21,7 +21,6 @@ port.on('open', (err) => {
         if (decodedData.length < 20) {
             return
         }
-        console.log(decodedData)
         const interpreter = InterpreterFactory.getInterpreter(decodedData)
         if (interpreter instanceof BaeminInterpreter) {
             const printer = new Printer()

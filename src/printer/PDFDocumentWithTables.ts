@@ -31,12 +31,10 @@ export class PDFDocumentWithTables extends PDFDocument {
             let result = 0
 
             row.forEach((cell: any) => {
-                console.log(cell)
                 const cellHeight = this.heightOfString(cell, {
                     width: columnWidth,
                     align: 'left'
                 })
-                console.log('cell height ' + cellHeight)
                 result = Math.max(result, cellHeight)
             })
 
@@ -87,8 +85,6 @@ export class PDFDocumentWithTables extends PDFDocument {
         this.fontSize(menuFontSize)
         table.rows.forEach((row: any, i: any) => {
             const rowHeight = computeRowHeight(row)
-            console.log(row)
-            console.log('rowHeight ' + rowHeight)
             // Switch to next page if we cannot go any further because the space is over.
             // For safety, consider 3 rows margin instead of just one
             if (startY + 3 * rowHeight < maxY) {
@@ -124,10 +120,7 @@ export class PDFDocumentWithTables extends PDFDocument {
             })
 
             // Refresh the y coordinate of the bottom of this row
-            console.log(startY)
-            console.log('before' + rowBottomY)
             rowBottomY = Math.max(yPosition + rowHeight, rowBottomY)
-            console.log('after' + rowBottomY)
         })
 
         this.x = startX

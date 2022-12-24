@@ -9,6 +9,7 @@ import { MenuPrinter } from './MenuPrinter'
 import { OriginPrinter } from './OriginPrinter'
 import { ExtraInfoPrinter } from './ExtraInfoPrinter'
 import { NoticePrinter } from './NoticePrinter'
+import { WinPrinter } from '../Utils/node-native-printer/src/windowsPrinter'
 
 export class Printer {
     private readonly outputPath: string
@@ -27,7 +28,7 @@ export class Printer {
             size: [600, 5000],
             margin: 0
         })
-        this.outputPath = 'output.pdf' || `${Math.random()}.pdf`
+        this.outputPath = `${Math.random()}.pdf`
         this.titlePrinter = new TitlePrinter()
         this.orderMetaInfoPrinter = new OrderMetaInfoPrinter()
         this.shippingInfoPrinter = new ShippingInfoPrinter()
@@ -38,7 +39,7 @@ export class Printer {
         this.noticePrinter = new NoticePrinter()
     }
 
-    print (receiptInfo: ReceiptInfo) {
+    async print (receiptInfo: ReceiptInfo) {
         this.titlePrinter.printTitle(this.doc, receiptInfo)
         this.orderMetaInfoPrinter.printOrderMetaInfo(this.doc, receiptInfo)
         this.shippingInfoPrinter.printShippingInfo(this.doc, receiptInfo)
@@ -62,5 +63,9 @@ export class Printer {
         this.originPrinter.printOrigin(resultDoc)
         this.noticePrinter.printNotice(resultDoc)
         resultDoc.end()
+        const printer = new WinPrinter()
+        printer.setPrinter('SLK-TS100 (copy 1)')
+        await printer.print(this.outputPath)
+        fs.unlinkSync(this.outputPath)
     }
 }

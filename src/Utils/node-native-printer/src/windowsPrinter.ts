@@ -4,7 +4,7 @@ import os from 'os'
 import edge from 'edge-js'
 
 // eslint-disable-next-line n/no-path-concat
-const dllPath = fs.realpathSync(__dirname + '/../lib/windows/windows_printer.dll').replace('.asar', '.asar.unpacked')
+const dllPath = fs.realpathSync(process.cwd() + '/src/Utils/node-native-printer/lib/windows/windows_printer.dll').replace('.asar', '.asar.unpacked')
 
 export class WinPrinter {
     printer: string
@@ -126,14 +126,16 @@ export class WinPrinter {
 
         const options: any = {}
         Object.keys(defaultOptions).forEach(value => {
-            if (userOptions[value] !== null || userOptions[value] !== undefined) { options[value] = userOptions[value] } else { options[value] = defaultOptions[value] }
+            if (userOptions[value] != null || userOptions[value] !== undefined) { options[value] = userOptions[value] } else { options[value] = defaultOptions[value] }
         })
 
+        console.log(options)
         const printFile = edge.func({
             assemblyFile: dllPath,
             typeName: 'windows_printer.API',
             methodName: 'Print' // This must be Func<object,Task<object>>
         })
+        console.log('굳')
 
         if (!filename) {
             throw new Error('File path not specified')

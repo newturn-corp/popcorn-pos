@@ -29,7 +29,6 @@ export class Printer {
             margin: 0
         })
         this.outputPath = `${Math.random()}.pdf`
-        this.doc.pipe(fs.createWriteStream('test.pdf'))
         this.titlePrinter = new TitlePrinter()
         this.orderMetaInfoPrinter = new OrderMetaInfoPrinter()
         this.shippingInfoPrinter = new ShippingInfoPrinter()
@@ -64,9 +63,11 @@ export class Printer {
         this.originPrinter.printOrigin(resultDoc)
         this.noticePrinter.printNotice(resultDoc)
         resultDoc.end()
-        const printer = new WinPrinter()
-        printer.setPrinter('SLK-TS100 (copy 1)')
-        await printer.print(this.outputPath)
-        fs.unlinkSync(this.outputPath)
+        setTimeout(async () => {
+            const printer = new WinPrinter()
+            printer.setPrinter('COM1')
+            await printer.print(this.outputPath)
+            fs.unlinkSync(this.outputPath)
+        }, 1000)
     }
 }

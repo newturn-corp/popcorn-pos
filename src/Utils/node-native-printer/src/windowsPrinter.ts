@@ -1,11 +1,8 @@
-import dotenv from 'dotenv'
 import fs from 'fs'
 import os from 'os'
 
-// eslint-disable-next-line n/no-path-concat
-dotenv.config({ path: fs.realpathSync(__dirname + '/../.env') })
+import edge from 'edge-js'
 
-const edge = require(`../../${process.env.NNP_PACKAGE}`)
 // eslint-disable-next-line n/no-path-concat
 const dllPath = fs.realpathSync(__dirname + '/../lib/windows/windows_printer.dll').replace('.asar', '.asar.unpacked')
 

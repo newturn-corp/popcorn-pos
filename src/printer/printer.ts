@@ -65,7 +65,7 @@ export class Printer {
         resultDoc.end()
         setTimeout(async () => {
             const printer = new WinPrinter()
-            printer.setPrinter('COM1')
+            printer.setPrinter('SLK-TS100 (copy 1)')
             await printer.print(this.outputPath)
             fs.unlinkSync(this.outputPath)
         }, 1000)

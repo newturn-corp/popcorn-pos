@@ -129,13 +129,11 @@ export class WinPrinter {
             if (userOptions[value] != null || userOptions[value] !== undefined) { options[value] = userOptions[value] } else { options[value] = defaultOptions[value] }
         })
 
-        console.log(options)
         const printFile = edge.func({
             assemblyFile: dllPath,
             typeName: 'windows_printer.API',
             methodName: 'Print' // This must be Func<object,Task<object>>
         })
-        console.log('굳')
 
         if (!filename) {
             throw new Error('File path not specified')

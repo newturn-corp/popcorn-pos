@@ -29,6 +29,7 @@ export class Printer {
             margin: 0
         })
         this.outputPath = `${Math.random()}.pdf`
+        this.doc.pipe(fs.createWriteStream('test.pdf'))
         this.titlePrinter = new TitlePrinter()
         this.orderMetaInfoPrinter = new OrderMetaInfoPrinter()
         this.shippingInfoPrinter = new ShippingInfoPrinter()
@@ -48,7 +49,7 @@ export class Printer {
         this.extraInfoPrinter.printExtraInfo(this.doc, receiptInfo)
         this.originPrinter.printOrigin(this.doc)
         this.noticePrinter.printNotice(this.doc)
-        // this.doc.end()
+        this.doc.end()
         const resultDoc = new PDFDocumentWithTables({
             size: [600, this.doc.y + 50],
             margin: 0

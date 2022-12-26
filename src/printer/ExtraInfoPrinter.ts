@@ -9,7 +9,7 @@ export class ExtraInfoPrinter {
         doc
             .font(defaultFont)
             .fontSize(30)
-            .text(`주문 번호: ${receiptInfo.orderNumber.full}`, 0, undefined, {
+            .text(`주문 번호: ${receiptInfo.orderMetaInfo.fullOrderNumber}`, 0, undefined, {
                 paragraphGap: 5
             })
         doc

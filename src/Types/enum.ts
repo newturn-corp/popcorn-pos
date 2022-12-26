@@ -1,6 +1,6 @@
 export enum Platform {
     BAEMIN,
-    BAEMUN_1,
+    BAEMIN_1,
     YOGIYO,
     COUPANG
 }

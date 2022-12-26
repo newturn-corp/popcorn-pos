@@ -1,13 +1,20 @@
 import { Interpreter } from './Interpreter'
 import { BaeminInterpreter } from './baeminInterpreter'
+import { PlatformDetector } from './PlatformDetector'
+import { Platform } from '../Types/enum'
+// import { BaeminOneInterpreter } from './BaeminOneInterpreter'
 
 class InterpreterFactory {
-    getInterpreter (rawData: string): Interpreter | undefined {
-        const splitedData = rawData.split('\n\r')
-        const firstLine = splitedData[0]
-        if (firstLine.includes('배달 주문전표')) {
+    getInterpreter (rawData: string): Interpreter {
+        const detector = new PlatformDetector()
+        switch (detector.detect(rawData)) {
+        case Platform.BAEMIN:
             return new BaeminInterpreter()
         }
+        // case Platform.BAEMIN_1:
+        //     return new BaeminOneInterpreter()
+        // }
+        throw new Error('Unhandled Interpreter')
     }
 }
 

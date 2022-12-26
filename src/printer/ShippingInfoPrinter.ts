@@ -9,13 +9,13 @@ export class ShippingInfoPrinter {
         doc
             .font(defaultFont)
             .fontSize(50)
-            .text(`지번: ${receiptInfo.address.old}`, 0, undefined, {
+            .text(`지번: ${receiptInfo.deliveryInfo.old}`, 0, undefined, {
                 paragraphGap: 5
             })
         doc
             .font(defaultFont)
             .fontSize(45)
-            .text(`도로명: ${receiptInfo.address.new}`, {
+            .text(`도로명: ${receiptInfo.deliveryInfo.new}`, {
                 paragraphGap: 10
             })
         doc

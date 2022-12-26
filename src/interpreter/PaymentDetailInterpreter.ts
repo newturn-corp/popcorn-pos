@@ -1,6 +1,6 @@
 import { MenuInfo, OptionInfo } from '../DTO/menuInfo'
 
-export class MenuInterpreter {
+export class PaymentDetailInterpreter {
     private extractBaeminMenuLines (splitedData: string[]) {
         let startLineIndex = null
         let endLineIndex = null
@@ -40,9 +40,14 @@ export class MenuInterpreter {
         }
         return menuList
     }
-    //
-    // getMenuList (platform: number, splitedData: string[]) {
-    //     const metaLine =
-    //     const menuListLines = splitedData[splitedData.length - 9]
-    // }
+
+    getDeliveryTip (splitedData: string[]) {
+        const tipLine = splitedData[splitedData.length - 14]
+        return Number(tipLine.slice(tipLine.length - 5, tipLine.length).trim().replace(',', ''))
+    }
+
+    getTotalPrice (splitedData: string[]) {
+        const totalPriceLine = splitedData[splitedData.length - 12]
+        return Number(totalPriceLine.slice(totalPriceLine.length - 7, totalPriceLine.length).trim().replace(',', ''))
+    }
 }

@@ -1,40 +1,95 @@
 import { MenuInfo } from './menuInfo'
+import sinonChai from 'sinon-chai'
+import { Moment } from 'moment-timezone'
 
-export class ReceiptInfo {
-    platform: number
-    orderNumber: {
-        short: string,
-        full: string
+export class DeliveryInfo {
+    phone: string | null
+    singleAddress: string | null
+    oldAddress: string | null
+    newAddress: string | null
+
+    constructor (
+        phone: string | null,
+        singleAddress: string | null,
+        oldAddress: string | null,
+        newAddress: string | null
+    ) {
+        this.phone = phone
+        this.singleAddress = singleAddress
+        this.oldAddress = oldAddress
+        this.newAddress = newAddress
     }
+}
 
+export class OrderMetaInfo {
+    shortOrderNumber: string
+    fullOrderNumber: string
     payMethod: string
-    address: {
-        old: string,
-        new: string
-    }
+    orderAt: Moment
 
-    phone: string
-    storeRequest: string
-    deliveryRequest: string
+    constructor (
+        shortOrderNumber: string,
+        longOrderNumber: string,
+        payMethod: string,
+        orderAt: Moment
+    ) {
+        this.shortOrderNumber = shortOrderNumber
+        this.fullOrderNumber = longOrderNumber
+        this.payMethod = payMethod
+        this.orderAt = orderAt
+    }
+}
+
+export class RequestInfo {
+    store: string
+    rider: string
+    environment: boolean
+
+    constructor (
+        store: string,
+        rider: string,
+        environment: boolean
+    ) {
+        this.store = store
+        this.rider = rider
+        this.environment = environment
+    }
+}
+
+export class PaymentDetailInfo {
     menuList: MenuInfo[]
     deliveryTip: number
     totalPrice: number
-    orderAt: string
+    extraPaymentNotice: string | null
 
-    constructor (platform: number, shortOrderNumber: string, fullOrderNumber: string, payMethod: string, oldAddress: string, newAddress: string, phone: string, storeRequest: string, deliveryRequest: string, menuList: MenuInfo[], deliveryTip: number, totalPrice: number, orderAt: string) {
+    constructor (menuList: MenuInfo[], deliveryTip: number, totalPrice: number, extraPaymentNotice: string | null = null) {
+        this.menuList = menuList
+        this.deliveryTip = deliveryTip
+        this.totalPrice = totalPrice
+        this.extraPaymentNotice = extraPaymentNotice
+    }
+}
+
+export class ReceiptInfo {
+    platform: number
+    orderMetaInfo: OrderMetaInfo
+    deliveryInfo: DeliveryInfo
+    requestInfo: RequestInfo
+
+    constructor (
+        platform: number,
+        orderMetaInfo: OrderMetaInfo,
+        deliveryInfo: DeliveryInfo,
+        requestInfo: RequestInfo,
+        menuList: MenuInfo[],
+        deliveryTip: number,
+        totalPrice: number,
+        orderAt: string
+    ) {
         this.platform = platform
-        this.orderNumber = {
-            short: shortOrderNumber,
-            full: fullOrderNumber
-        }
-        this.payMethod = payMethod
-        this.address = {
-            old: oldAddress,
-            new: newAddress
-        }
-        this.phone = phone
-        this.storeRequest = storeRequest
-        this.deliveryRequest = deliveryRequest
+        this.orderMetaInfo = orderMetaInfo
+        this.deliveryInfo = deliveryInfo
+        this.requestInfo = requestInfo
         this.menuList = menuList
         this.deliveryTip = deliveryTip
         this.totalPrice = totalPrice
